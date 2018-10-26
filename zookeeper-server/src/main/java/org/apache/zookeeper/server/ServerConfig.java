@@ -36,19 +36,33 @@ import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
  */
 @InterfaceAudience.Public
 public class ServerConfig {
-    ////
-    //// If you update the configuration parameters be sure
-    //// to update the "conf" 4letter word
-    ////
+    /**
+     * 客户端连接server的端口，对外服务端口，一般为2181
+     */
     protected InetSocketAddress clientPortAddress;
     protected InetSocketAddress secureClientPortAddress;
+    /**
+     * 存储快照文件snapshot的目录。默认情况下，事务日志也会存储在这里。
+     * 建议同时配置参数dataLogDir, 事务日志的写性能直接影响zk性能
+     */
     protected File dataDir;
+    /**
+     * 事务日志输出目录。尽量给事务日志的输出配置单独的磁盘或是挂载点，这将极大的提升ZK性能
+     */
     protected File dataLogDir;
     protected int tickTime = ZooKeeperServer.DEFAULT_TICK_TIME;
+    /**
+     * 单个客户端与单台服务器之间的连接数的限制，是ip级别的，默认是60
+     * 如果设置为0，那么表明不作任何限制。
+     * 请注意这个限制的使用范围，仅仅是单台客户端机器与单台ZK服务器之间的连接数限制
+     * 不是针对指定客户端IP，也不是ZK集群的连接数限制，也不是单台ZK对所有客户端的连接数限制
+     */
     protected int maxClientCnxns;
-    /** defaults to -1 if not set explicitly */
+    /**
+     * Session超时时间限制，如果客户端设置的超时时间不在这个范围，那么会被强制设置为最大或最小时间。
+     * 默认的Session超时时间是在2 *  tickTime ~ 20 * tickTime 这个范围
+     */
     protected int minSessionTimeout = -1;
-    /** defaults to -1 if not set explicitly */
     protected int maxSessionTimeout = -1;
     protected String metricsProviderClassName = NullMetricsProvider.class.getName();
     protected Properties metricsProviderConfiguration = new Properties();

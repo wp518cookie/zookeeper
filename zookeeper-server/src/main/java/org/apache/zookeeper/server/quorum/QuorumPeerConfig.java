@@ -86,8 +86,28 @@ public class QuorumPeerConfig {
     protected boolean localSessionsEnabled = false;
     protected boolean localSessionsUpgradingEnabled = false;
 
+    /**
+     * LF初始通信时限
+     * 集群中的follower服务器(F)与leader服务器(L)之间初始连接时能容忍的最多心跳数（tickTime的数量）。
+     * 此配置表示，允许follower（相对于leader而言的“客户端”）连接并同步到leader的初始化连接时间，
+     * 它以tickTime的倍数来表示。当超过设置倍数的tickTime时间，则连接失败。
+     * 如果在设定的时间段内，半数以上的跟随者未能完成同步，领导者便会宣布放弃领导地位，
+     * 进行另一次的领导选举。如果zk集群环境数量确实很大，
+     * 同步数据的时间会变长，因此这种情况下可以适当调大该参数。默认为10。
+     */
     protected int initLimit;
+    /**
+     * syncLimit：LF同步通信时限
+     * 集群中的follower服务器(F)与leader服务器(L)之间请求和应答
+     * 之间能容忍的最多心跳数（tickTime的数量）。
+     * 此配置表示，leader与follower之间发送消息，请求和应答时间长度。
+     * 如果follower在设置的时间内不能与leader进行通信，
+     * 那么此follower将被丢弃。所有关联到这个跟随者的客户端将连接到另外一个跟随者。
+     */
     protected int syncLimit;
+    /**
+     * 选举算法
+     */
     protected int electionAlg = 3;
     protected int electionPort = 2182;
     protected boolean quorumListenOnAllIPs = false;
@@ -95,14 +115,24 @@ public class QuorumPeerConfig {
     protected long serverId = UNSET_SERVERID;
 
     protected QuorumVerifier quorumVerifier = null, lastSeenQuorumVerifier = null;
+    /**
+     * 指定了需要保留的文件数目。默认是保留3个
+     */
     protected int snapRetainCount = 3;
+    /**
+     * ZK提供了自动清理事务日志和快照文件的功能，
+     * 这个参数指定了清理频率，单位是小时，需要配置一个1或更大的整数，默认是0，表示不开启自动清理功能。
+     */
     protected int purgeInterval = 0;
     protected boolean syncEnabled = true;
 
     protected LearnerType peerType = LearnerType.PARTICIPANT;
 
     /**
-     * Configurations for the quorumpeer-to-quorumpeer sasl authentication
+     * sasl:Simple Authentication and Security Layer
+     * 一种用来扩充C/S模式验证能力的机制。
+     * 在Postfix可以利用SASL来判断用户是否有权使用转发服务，或是辨认谁在使用你的服务器。
+     * todo 后续了解
      */
     protected boolean quorumServerRequireSasl = false;
     protected boolean quorumLearnerRequireSasl = false;

@@ -66,6 +66,7 @@ public class ZooKeeperServerMain {
         ZooKeeperServerMain main = new ZooKeeperServerMain();
         try {
             main.initializeAndRun(args);
+            LOG.info("--------------0000000 initial finish!");
         } catch (IllegalArgumentException e) {
             LOG.error("Invalid arguments, exiting abnormally", e);
             LOG.info(USAGE);
